@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"
+          media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/materialize.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Clustering</title>
+</head>
+<body>
+<div class="row" style="margin-top:20px">
+    <div class="col s12">
+        <nav class="teal darken-2">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo" style="margin-left:20px">Submit a new analysis bellow</a>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="container">
+
+    <div class="row" style="margin-top:20px">
+        <form class="form-inline" method="POST" action="{{ url_for('test') }}">
+            <div class="form-group">
+                <div class="col s2"></div>
+                <div class="col s6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Choose number of clusters</span>
+                        <select name="comp_select" class="selectpicker form-control">
+                            {% for o in data %}
+                            <option value="{{ o.name }}">{{ o.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <button type="submit" class="btn btn-default" style="margin-top:20px">View Analysis</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col s2"></div>
+        <div class="col s8">
+            <img class="materialboxed center" width="650" src="{{ user_image }}" alt="You need to click view analysis first">
+
+        </div>
+        <script type="text/javascript">
+                $(document).ready(function(){
+                    $('select').formSelect();
+                    $('.materialboxed').materialbox();
+              });
+        </script>
+    </div>
+</div>
+</body>
+</html>

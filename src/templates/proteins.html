@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"
+          media="screen,projection"/>
+     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"
+          media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/materialize.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Clustering</title>
+</head>
+<body>
+<header>
+    <nav class="teal darken-2">
+        <!--<nav class="red lighten-2">-->
+        <div class="nav-wrapper">
+            <a href="/proteins" class="brand-logo" style="margin-left:20px">Protein Analyses</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/proteins">Protein Analyses Application</a></li>
+                <li><a href="/publications">Publications</a></li>
+                <li><a href="/resume">Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <h1>Submit a new analysis bellow</h1>
+        <div class="row" style="margin-top:20px">
+            <form class="form-inline" method="POST" action="{{ url_for('testproteins') }}">
+                <div class="form-group">
+                    <div class="col s4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Choose protein</span>
+                            <select name="protein_select" class="selectpicker form-control">
+                                {% for o in proteins %}
+                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Choose algorithm</span>
+                            <select name="alg_select" class="selectpicker form-control">
+                                {% for o in method %}
+                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s4">
+                        <div class="input-group">
+                            <span class="input-group-addon">Choose number of clusters</span>
+                            <select name="comp_select" class="selectpicker form-control">
+                                {% for o in data %}
+                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <button type="submit" class="btn btn-default" style="margin-top:20px">View Analysis</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <h3>Displaying:</h3>
+
+            <ul class="collection">
+                <li class="collection-item">Algorithm: {{ alg }}</li>
+                <li class="collection-item">Protein: {{ protein }}</li>
+                <li class="collection-item">Cluster numbers: {{ cluster_no }}</li>
+            </ul>
+
+        </div>
+        <div class="row" style="margin-top:20px">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <img class="materialboxed center" width="650" src="{{ user_image }}"
+                     alt="You need to click view analysis first">
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $('select').formSelect();
+                    $('.materialboxed').materialbox();
+              });
+
+
+            </script>
+        </div>
+    </div>
+</main>
+<footer class="page-footer teal">
+    <div class="row">
+        <div class="col s4">
+            <i style="display:inline;vertical-align: bottom;" class="small material-icons">call</i>
+            <p style="display:inline">+040743693658</p>
+        </div>
+        <div class="col s4"><i style="display:inline;vertical-align: bottom;" class="small material-icons">mail</i>
+            <p style="display:inline" href="albert.silvana@cs.ubbcluj.ro">albert.silvana@cs.ubbcluj.ro</p>
+        </div>
+        <div class="col s4"><p>© 2018 by Silvana Albert</p></div>
+    </div>
+</footer>
+</body>
+</html>

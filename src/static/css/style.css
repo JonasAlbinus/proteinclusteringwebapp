@@ -1,0 +1,23 @@
+body {
+  # background-color: #efebe9;
+    background-color: #f5f5f5;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+
+.wp3img {
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.txtNew {
+    word-wrap: break-word;
+    text-align: start;
+}
