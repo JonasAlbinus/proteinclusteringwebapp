@@ -1,7 +1,7 @@
 import os
 import threading
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for, send_from_directory
 from clustering import cluster
 from compute_analysis import compute_analysis
 from pathlib import Path
@@ -74,12 +74,15 @@ def testproteins():
 
     if alg == "K-Means Clustering":
         filename = ("static/data/" + protein + "_" + k + "_k-means_pca" + ".jpg")
+        file = protein + "_" + k + "_k-means_pca" + ".jpg"
         algName = "k-means"
     elif alg == "Agglomerative Clustering":
         filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".jpg")
+        file = protein + "_" + k + "_k-_agg_pca" + ".jpg"
         algName = "agg"
     else:
         filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".jpg")
+        file = protein + "_" + k + "_mb-k-means_pca" + ".jpg"
         algName = "mb-k-means"
 
     my_file = Path(filename)
@@ -90,7 +93,8 @@ def testproteins():
                                proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                                method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
                                        {'name': 'MiniBatchKMeans Clustering'}],
-                               user_image=filename
+                               user_image=filename,
+                               filename=file
                                )
     else:
         compute_thread = threading.Thread(target=compute_analysis, args=(protein, int(step), algName))
@@ -108,11 +112,20 @@ def testproteins():
 @app.route('/proteins', methods=['GET', 'POST'])
 def proteins():
     return render_template('proteins.html',
-                           data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'}, {'name': '2500'}],
+                           data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'},
+                                 {'name': '2500'}],
                            proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                            method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
                                    {'name': 'MiniBatchKMeans Clustering'}]
                            )
+
+
+@app.route('/files', methods=['POST'])
+def files():
+    """Download a file."""
+    filename = request.form.get('filename')
+    ROOT_DIRECTORY = 'static/data/'
+    return send_from_directory(ROOT_DIRECTORY, filename, as_attachment=True)
 
 
 # No caching at all for API endpoints.
