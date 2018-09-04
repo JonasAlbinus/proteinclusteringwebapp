@@ -4,6 +4,7 @@ import pandas as pd
 import sklearn
 import numpy as np
 import matplotlib.pyplot as plt
+import threading
 from sklearn import metrics, decomposition
 
 from sklearn.cluster import KMeans, AgglomerativeClustering, SpectralClustering, MiniBatchKMeans
@@ -11,7 +12,7 @@ from sklearn.cluster import KMeans, AgglomerativeClustering, SpectralClustering,
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__))))
 REMOVE_EVEN_CLUSTERS = False
 ENC_DATA_PATH = os.path.join(ROOT_DIR, "encoding/data/RSA")
-ENC_CLUSTERING_PATH = os.path.join(ROOT_DIR, "encoding/data/clustering")
+ENC_CLUSTERING_PATH = os.path.join(ROOT_DIR, "static/data")
 
 
 def read_data(path, normalize=None):
@@ -57,7 +58,7 @@ def cluster(data, method, k):
         return MiniBatchKMeans(n_clusters=k, random_state=42).fit_predict(data)
 
 
-def comute_plot_clusters(step, data, verbose=False, remove_even_clusters=False):
+def comute_plot_clusters(step, data, c, name, verbose=False, remove_even_clusters=False):
     pca = decomposition.PCA(n_components=2)
     reduced_pca = pca.fit_transform(data)
 
@@ -68,30 +69,29 @@ def comute_plot_clusters(step, data, verbose=False, remove_even_clusters=False):
         y = y[y % 2 == 1]
         y = order_labels(y)
     K = len(set(y))
-    for c in ['spec']:
-        print("Method: " + c)
-        y_pred = cluster(data, method=c, k=K)
+    print("Method: " + c)
+    y_pred = cluster(data, method=c, k=K)
 
-        v_measure = metrics.v_measure_score(y, y_pred)
-        print('Number of clusters (K): %d' % K)
-        if verbose:
-            print("Homogeneity: %0.3f" % metrics.homogeneity_score(y, y_pred))
-            print("Completeness: %0.3f" % metrics.completeness_score(y, y_pred))
-        print("V-measure: %0.3f" % v_measure)
-        if verbose:
-            print("Adjusted Rand Index: %0.3f"
-                  % metrics.adjusted_rand_score(y, y_pred))
-            print("Adjusted Mutual Information: %0.3f"
-                  % metrics.adjusted_mutual_info_score(y, y_pred))
-        print("Silhouette Coefficient: %0.3f"
-              % metrics.silhouette_score(data, y_pred))
+    v_measure = metrics.v_measure_score(y, y_pred)
+    print('Number of clusters (K): %d' % K)
+    if verbose:
+        print("Homogeneity: %0.3f" % metrics.homogeneity_score(y, y_pred))
+        print("Completeness: %0.3f" % metrics.completeness_score(y, y_pred))
+    print("V-measure: %0.3f" % v_measure)
+    if verbose:
+        print("Adjusted Rand Index: %0.3f"
+              % metrics.adjusted_rand_score(y, y_pred))
+        print("Adjusted Mutual Information: %0.3f"
+              % metrics.adjusted_mutual_info_score(y, y_pred))
+    print("Silhouette Coefficient: %0.3f"
+          % metrics.silhouette_score(data, y_pred))
 
-        plot(reduced_pca, order_labels(y_pred),
-             os.path.join(ENC_CLUSTERING_PATH, name + '_' + str(K) + '_' + c +
-                          '_pca.jpg'),
-             title=name + ', K: %d' % K,
-             legend_right='V-measure: %.3f' % v_measure,
-             legend_left='Explained var. ratio: %.2f' % sum(pca.explained_variance_ratio_))
+    plot(reduced_pca, order_labels(y_pred),
+         os.path.join(ENC_CLUSTERING_PATH, name + '_' + str(K) + '_' + c +
+                      '_pca.jpg'),
+         title=name + ', K: %d' % K,
+         legend_right='V-measure: %.3f' % v_measure,
+         legend_left='Explained var. ratio: %.2f' % sum(pca.explained_variance_ratio_))
 
 
 def plot(x, y, filename, legend_right=None, legend_left=None, title=None):
@@ -118,15 +118,17 @@ def plot(x, y, filename, legend_right=None, legend_left=None, title=None):
     plt.close(fig)
 
 
+def compute_analysis(protein, step, alg):
+    path = ENC_DATA_PATH + "/" + protein + ".csv"
+    print("P: %s" % path)
+    print("Analyzing %s" % protein)
+    # print("STEP: %s" % step)
+
+    data_std = read_data(path, normalize='std')
+    data_std = np.delete(data_std, 10000, axis=0)
+
+    comute_plot_clusters(step, data_std, alg, protein, verbose=False, remove_even_clusters=REMOVE_EVEN_CLUSTERS)
+
+
 if __name__ == '__main__':
-    path = ENC_DATA_PATH
-    for file in os.listdir(path):
-        name = file.replace(".csv", "")
-        print("Analyzing %s" % name)
-        for step in [10]:
-            print("STEP: %d" % step)
-
-            data_std = read_data(os.path.join(path, file), normalize='std')
-            data_std = np.delete(data_std, 10000, axis=0)
-
-            comute_plot_clusters(step, data_std, verbose=False, remove_even_clusters=REMOVE_EVEN_CLUSTERS)
+    compute_analysis("1GO1", 50, "agg")

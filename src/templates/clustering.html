@@ -47,7 +47,8 @@
     <div class="row" style="margin-top:20px">
         <div class="col s2"></div>
         <div class="col s8">
-            <img class="materialboxed center" width="650" src="{{ user_image }}" alt="You need to click view analysis first">
+            <img class="materialboxed center" width="650" src="{{ user_image }}"
+                 alt="You need to click view analysis first">
 
         </div>
         <script type="text/javascript">
@@ -55,7 +56,26 @@
                     $('select').formSelect();
                     $('.materialboxed').materialbox();
               });
+
+
         </script>
+    </div>
+    <div>
+        <div class="flow-text"> <i style="display:inline;vertical-align: bottom;" class="small material-icons">help</i>
+            Having 10000 successive conformations represented by RSA vectors we group them in classes by using a
+            hyperparameter named step(s) representing the cardinality of each class.
+            The step induces a new hyperparameter: the number of clusters to be used for the clustering process (K).
+
+            For example, a step = 2500 would mean that we are expecting K=4 classes, namely::
+            <ul>
+                <li>Class 1- conformations from 1 to 2500;</li>
+                <li>Class 2- conformations from 2501 to 5000;</li>
+                <li>Class 3- conformations from 5001 to 7500;</li>
+                <li>Class 4- conformations from 7501 to 10000.</li>
+            </ul>
+
+
+        </div>
     </div>
 </div>
 </body>
