@@ -79,8 +79,8 @@ def testproteins():
         filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".jpg")
         algName = "agg"
     else:
-        filename = ("static/data/" + protein + "_" + k + "_spec_pca" + ".jpg")
-        algName = "spec"
+        filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".jpg")
+        algName = "mb-k-means"
 
     my_file = Path(filename)
     if my_file.is_file():
@@ -89,7 +89,7 @@ def testproteins():
                                      {'name': '2500'}],
                                proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                                method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'Spectral Clustering'}],
+                                       {'name': 'MiniBatchKMeans Clustering'}],
                                user_image=filename
                                )
     else:
@@ -100,7 +100,7 @@ def testproteins():
                                      {'name': '2500'}],
                                proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                                method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'Spectral Clustering'}],
+                                       {'name': 'MiniBatchKMeans Clustering'}],
                                user_image="static/Refresh.png"
                                )
 
@@ -111,7 +111,7 @@ def proteins():
                            data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'}, {'name': '2500'}],
                            proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                            method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                   {'name': 'Spectral Clustering'}]
+                                   {'name': 'MiniBatchKMeans Clustering'}]
                            )
 
 
