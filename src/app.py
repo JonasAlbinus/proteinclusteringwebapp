@@ -40,7 +40,6 @@ def clustering():
 @app.route("/test", methods=['GET', 'POST'])
 def test():
     select = request.form.get('comp_select')
-    print(select)
     cluster(select)
     return render_template('clustering.html',
                            data=[{'name': '2'}, {'name': '3'}, {'name': '4'}, {'name': '5'}, {'name': '6'},
@@ -55,11 +54,6 @@ def testproteins():
     alg = request.form.get('alg_select')
     algName = ""
     k = ""
-    intstep = 0
-
-    print("step " + step)
-    print("protein " + protein)
-    print("alg " + alg)
 
     if step == 2500:
         k = "4"
@@ -73,18 +67,23 @@ def testproteins():
         k = "200"
 
     if alg == "K-Means Clustering":
-        filename = ("static/data/" + protein + "_" + k + "_k-means_pca" + ".jpg")
-        file = protein + "_" + k + "_k-means_pca" + ".jpg"
+        filename = ("static/data/" + protein + "_" + k + "_k-means_pca" + ".png")
+        file = protein + "_" + k + "_k-means_pca" + ".png"
         algName = "k-means"
     elif alg == "Agglomerative Clustering":
-        filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".jpg")
-        file = protein + "_" + k + "_k-_agg_pca" + ".jpg"
+        filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".png")
+        file = protein + "_" + k + "_k-_agg_pca" + ".png"
         algName = "agg"
+    elif alg == "birch":
+        filename = ("static/data/" + protein + "_" + k + "_birch_pca" + ".png")
+        file = protein + "_" + k + "_k-_birch_pca" + ".png"
+        algName = "birch"
     else:
-        filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".jpg")
-        file = protein + "_" + k + "_mb-k-means_pca" + ".jpg"
+        filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".png")
+        file = protein + "_" + k + "_mb-k-means_pca" + ".png"
         algName = "mb-k-means"
 
+    print(filename)
     my_file = Path(filename)
     if my_file.is_file():
         return render_template('proteins.html', alg=alg, protein=protein, cluster_no=step,
@@ -92,7 +91,7 @@ def testproteins():
                                      {'name': '2500'}],
                                proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                                method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'MiniBatchKMeans Clustering'}],
+                                       {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}],
                                user_image=filename,
                                filename=file
                                )
@@ -104,7 +103,7 @@ def testproteins():
                                      {'name': '2500'}],
                                proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                                method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'MiniBatchKMeans Clustering'}],
+                                       {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}],
                                user_image="static/Refresh.png"
                                )
 
@@ -116,7 +115,26 @@ def proteins():
                                  {'name': '2500'}],
                            proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
                            method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                   {'name': 'MiniBatchKMeans Clustering'}]
+                                   {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}]
+                           )
+
+
+@app.route('/som', methods=['GET', 'POST'])
+def som():
+    return render_template('som.html',
+                           proteins=[{'name': '7 Proteins'}, {'name': '58 Proteins'}])
+
+
+@app.route('/testsom', methods=['GET', 'POST'])
+def testsom():
+    alg = request.form.get('protein_select')
+    if alg == "7 Proteins":
+        filename = "static/som/7Proteins.png"
+    else:
+        filename = "static/som/58Proteins.png"
+    return render_template('som.html',
+                           proteins=[{'name': '7 Proteins'}, {'name': '58 Proteins'}],
+                           user_image=filename,
                            )
 
 

@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import threading
 from sklearn import metrics, decomposition
 
-from sklearn.cluster import KMeans, AgglomerativeClustering, SpectralClustering, MiniBatchKMeans
+from sklearn.cluster import KMeans, AgglomerativeClustering, SpectralClustering, MiniBatchKMeans, AffinityPropagation, \
+    Birch
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__))))
 REMOVE_EVEN_CLUSTERS = False
@@ -56,6 +57,8 @@ def cluster(data, method, k):
         return SpectralClustering(n_clusters=k, random_state=42).fit_predict(data)
     elif method == 'mb-k-means':
         return MiniBatchKMeans(n_clusters=k, random_state=42).fit_predict(data)
+    elif method == 'birch':
+        return Birch(n_clusters=k).fit_predict(data)
 
 
 def comute_plot_clusters(step, data, c, name, verbose=False, remove_even_clusters=False):
@@ -69,7 +72,6 @@ def comute_plot_clusters(step, data, c, name, verbose=False, remove_even_cluster
         y = y[y % 2 == 1]
         y = order_labels(y)
     K = len(set(y))
-    print("Method: " + c)
     y_pred = cluster(data, method=c, k=K)
 
     v_measure = metrics.v_measure_score(y, y_pred)
@@ -88,7 +90,7 @@ def comute_plot_clusters(step, data, c, name, verbose=False, remove_even_cluster
 
     plot(reduced_pca, order_labels(y_pred),
          os.path.join(ENC_CLUSTERING_PATH, name + '_' + str(K) + '_' + c +
-                      '_pca.jpg'),
+                      '_pca.png'),
          title=name + ', K: %d' % K,
          legend_right='V-measure: %.3f' % v_measure,
          legend_left='Explained var. ratio: %.2f' % sum(pca.explained_variance_ratio_))
@@ -96,12 +98,14 @@ def comute_plot_clusters(step, data, c, name, verbose=False, remove_even_cluster
 
 def plot(x, y, filename, legend_right=None, legend_left=None, title=None):
     fig = plt.figure(facecolor='white')
-    plt.scatter(x[:, 0], x[:, 1], c=y, marker='o', s=10)
+    t = np.arange(10000)
+    plt.scatter(x[:, 0], x[:, 1], c=t, marker='o', s=10)
     if title is not None:
         plt.title(title)
     plt.grid(linestyle='dotted')
 
     ax = fig.add_subplot(111)
+
     if legend_right is not None:
         ax.text(0.99, 0.01, legend_right,
                 verticalalignment='bottom', horizontalalignment='right',
@@ -120,9 +124,6 @@ def plot(x, y, filename, legend_right=None, legend_left=None, title=None):
 
 def compute_analysis(protein, step, alg):
     path = ENC_DATA_PATH + "/" + protein + ".csv"
-    print("P: %s" % path)
-    print("Analyzing %s" % protein)
-    # print("STEP: %s" % step)
 
     data_std = read_data(path, normalize='std')
     data_std = np.delete(data_std, 10000, axis=0)
