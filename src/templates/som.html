@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"
+          media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"
+          media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/materialize.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Clustering</title>
+</head>
+<body>
+<header>
+    <nav class="teal darken-2">
+        <!--<nav class="red lighten-2">-->
+        <div class="nav-wrapper">
+            <a href="/proteins" class="brand-logo" style="margin-left:20px">Protein Analysis</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/proteins">Clustering</a></li>
+                <li><a href="/som">Self Organising Maps</a></li>
+                <li><a href="/rsa"> RSA Average Trajectories</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row" style="margin-top:20px">
+            <form class="form-inline" method="POST" action="{{ url_for('testsom') }}">
+                <div class="form-group">
+                    <div class="col s3">
+                        <div class="input-group">
+                            <span class="input-group-addon">Choose analysis</span>
+                            <select name="protein_select" class="selectpicker form-control">
+                                {% for o in proteins %}
+                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s3">
+                        <button type="submit" class="btn btn-default" style="margin-top:20px"><i
+                                class="material-icons right">check</i>Submit Analysis
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row" style="margin-top:20px">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <img class="materialboxed center" width="650" src="{{ user_image }}"
+                     alt="You need to click view analysis first">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+                $(document).ready(function(){
+                    $('select').formSelect();
+                    $('.materialboxed').materialbox();
+              });
+
+
+
+
+        </script>
+
+        <div class="row">
+            <h5><i style="display:inline;vertical-align: bottom;"
+                   class="small material-icons">help</i>Parameters explained</h5>
+        </div>
+        <div class="row">
+            <div class="col s4">
+                <p> Self-organizing maps(SOMs) are unsupervised learning models related to the
+                    artificial neu-ral networks literature, known to be powerful data mining tools for visualizing
+                    high-dimensional data.
+                    A self-organizing map is a type of artificial neural network that is trained using unsupervised
+                    learning to provide a low-dimensional representation of a high-dimensional input space, called a
+                    map. The main characteristic of SOMs is that the mapping between the input and the output space
+                    (map) preserves the topology of the input space</p>
+                <p>
+                    Considering all protein conformations, a distribution vector can be computed for each protein, which
+                    stores
+                    information about the SA elements’ distribution in the protein’s conformations. This frequency
+                    vector is constructed by computing the probability of occurrence of letter the conformational
+                    transitions.
+                </p>
+                <p> Based on the 25 values (probability per letter overall in a protein's conformations), sets of 7 or
+                    58 proteins are analysed using SOM.</p>
+            </div>
+            <div class="col s4">
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Superfamily</th>
+                        <th>Proteins</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>3.20.20.80</td>
+                        <td>1B1Y, 1CNV, 1EDG, 1ITX, 1JFX, 1KFW, 1NAR, 1VFF, 2EBN</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>1.10.490.10</td>
+                        <td>1HLB, 1ITH, 1MBA, 2HBG, 2LHB, 1ASH, 1DLW, 1ECA</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>1.10.238.10</td>
+                        <td>1OMR, 1SRA, 1UHN, 2SAS, 1CB1, 1IQ3</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>2.40.50.140</td>
+                        <td>1SLJ, 1YVC, 1AH9, 1EOV, 1JT8, 1KRS</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2.60.120.260</td>
+                        <td>1NKG, 1PMJe 1ULO, 1GUI, 1I5P, 1K45</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>3.30.30.10</td>
+                        <td>1PE4f, 1SEG, 1BCG, 1GPT, 1I2U, 1JXC</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>2.60.40.10</td>
+                        <td>1R6V, 2FCB, 1JBJ, 1JE6, 1NCT, 1OLL</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>3.40.50.150</td>
+                        <td>1Y8C, 1AF7, 1DUS, 1F3L, 1Y8C, 1YUB</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>2.160.20.10</td>
+                        <td>1QCX, 1RU4, 1VBL, 1BHE, 1EE6</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col s4">
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Superfamily</th>
+                        <th>Proteins</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1.10.490.10</td>
+                        <td>1ASH, 1DLW, 1ECA</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>1.10.760.10</td>
+                        <td>1C52, 1CCR</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2.10.25.10</td>
+                        <td>1APQ, 1COU</td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+<footer class="page-footer teal">
+    <div class="row">
+        <div class="col s4">
+            <i style="display:inline;vertical-align: bottom;" class="small material-icons">call</i>
+            <p style="display:inline">+040743693658</p>
+        </div>
+        <div class="col s4"><i style="display:inline;vertical-align: bottom;" class="small material-icons">mail</i>
+            <p style="display:inline" href="albert.silvana@cs.ubbcluj.ro">albert.silvana@cs.ubbcluj.ro</p>
+        </div>
+        <div class="col s4"><p>© 2018 by Silvana Albert</p></div>
+    </div>
+</footer>
+</body>
+</html>

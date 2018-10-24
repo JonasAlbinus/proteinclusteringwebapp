@@ -72,11 +72,11 @@ def testproteins():
         algName = "k-means"
     elif alg == "Agglomerative Clustering":
         filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".png")
-        file = protein + "_" + k + "_k-_agg_pca" + ".png"
+        file = protein + "_" + k + "_agg_pca" + ".png"
         algName = "agg"
     elif alg == "birch":
         filename = ("static/data/" + protein + "_" + k + "_birch_pca" + ".png")
-        file = protein + "_" + k + "_k-_birch_pca" + ".png"
+        file = protein + "_" + k + "_birch_pca" + ".png"
         algName = "birch"
     else:
         filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".png")
@@ -85,13 +85,13 @@ def testproteins():
 
     print(filename)
     my_file = Path(filename)
+
+
     if my_file.is_file():
         return render_template('proteins.html', alg=alg, protein=protein, cluster_no=step,
-                               data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'},
-                                     {'name': '2500'}],
-                               proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
-                               method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}],
+                               data=get_data_array(step),
+                               proteins=get_proteins_array(protein),
+                               method=get_alg_array(alg),
                                user_image=filename,
                                filename=file
                                )
@@ -99,11 +99,9 @@ def testproteins():
         compute_thread = threading.Thread(target=compute_analysis, args=(protein, int(step), algName))
         compute_thread.start()
         return render_template('proteins.html', alg=alg, protein=protein, cluster_no=step,
-                               data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'},
-                                     {'name': '2500'}],
-                               proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
-                               method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                       {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}],
+                               data=get_data_array(step),
+                               proteins=get_proteins_array(protein),
+                               method=get_alg_array(alg),
                                user_image="static/Refresh.png"
                                )
 
@@ -111,11 +109,9 @@ def testproteins():
 @app.route('/proteins', methods=['GET', 'POST'])
 def proteins():
     return render_template('proteins.html',
-                           data=[{'name': '50'}, {'name': '100'}, {'name': '500'}, {'name': '1000'},
-                                 {'name': '2500'}],
-                           proteins=[{'name': '1GO1'}, {'name': '1JT8'}, {'name': '1L3P'}, {'name': '1P1L'}],
-                           method=[{'name': 'K-Means Clustering'}, {'name': 'Agglomerative Clustering'},
-                                   {'name': 'MiniBatchKMeans Clustering'}, {'name': 'Birch Clustering'}]
+                           data=get_data_array(50),
+                           proteins=get_proteins_array("1GO1"),
+                           method=get_alg_array('K-Means Clustering')
                            )
 
 
@@ -138,6 +134,25 @@ def testsom():
                            )
 
 
+@app.route('/rsa', methods=['GET', 'POST'])
+def rsa():
+    return render_template('rsa.html',
+                           proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}])
+
+
+@app.route('/testrsa', methods=['GET', 'POST'])
+def testrsa():
+    alg = request.form.get('protein_select')
+    if alg == "Cutinase":
+        filename = "static/data/CUT_RSA.png"
+    else:
+        filename = "static/data/PET_RSA.png"
+    return render_template('rsa.html',
+                           proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}],
+                           user_image=filename,
+                           )
+
+
 @app.route('/files', methods=['POST'])
 def files():
     """Download a file."""
@@ -154,6 +169,85 @@ def add_header(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
+
+
+def get_proteins_array(protein):
+    proteinsArray = []
+
+    if protein == '1GO1':
+        proteinsArray.append({'name': '1GO1', "Selected": True})
+    else:
+        proteinsArray.append({'name': '1GO1', "Selected": False})
+
+    if protein == '1JT8':
+        proteinsArray.append({'name': '1JT8', "Selected": True})
+    else:
+        proteinsArray.append({'name': '1JT8', "Selected": False})
+
+    if protein == '1P1L':
+        proteinsArray.append({'name': '1P1L', "Selected": True})
+    else:
+        proteinsArray.append({'name': '1P1L', "Selected": False})
+
+    if protein == '1L3P':
+        proteinsArray.append({'name': '1L3P', "Selected": True})
+    else:
+        proteinsArray.append({'name': '1L3P', "Selected": False})
+
+    return proteinsArray
+
+
+def get_alg_array(alg):
+    alg_array = []
+
+    if alg == 'K-Means Clustering':
+        alg_array.append({'name': 'K-Means Clustering', "Selected": True})
+    else:
+        alg_array.append({'name': 'K-Means Clustering', "Selected": False})
+
+    if alg == 'Agglomerative Clustering':
+        alg_array.append({'name': 'Agglomerative Clustering', "Selected": True})
+    else:
+        alg_array.append({'name': 'Agglomerative Clustering', "Selected": False})
+
+    if alg == 'MiniBatchKMeans Clustering':
+        alg_array.append({'name': 'MiniBatchKMeans Clustering', "Selected": True})
+    else:
+        alg_array.append({'name': 'MiniBatchKMeans Clustering', "Selected": False})
+
+    if alg == 'Birch Clustering':
+        alg_array.append({'name': 'Birch Clustering', "Selected": True})
+    else:
+        alg_array.append({'name': 'Birch Clustering', "Selected": False})
+
+    return alg_array
+
+
+def get_data_array(data):
+
+    data_array = []
+
+    if data == '50':
+        data_array.append({'name': '50', "Selected": True})
+    else:
+        data_array.append({'name': '50', "Selected": False})
+
+    if data == '100':
+        data_array.append({'name': '100', "Selected": True})
+    else:
+        data_array.append({'name': '100', "Selected": False})
+
+    if data == '500':
+        data_array.append({'name': '500', "Selected": True})
+    else:
+        data_array.append({'name': '500', "Selected": False})
+
+    if data == '1000':
+        data_array.append({'name': '1000', "Selected": True})
+    else:
+        data_array.append({'name': '1000', "Selected": False})
+
+    return data_array
 
 
 if __name__ == '__main__':

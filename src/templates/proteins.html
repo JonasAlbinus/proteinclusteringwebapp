@@ -21,11 +21,9 @@
         <div class="nav-wrapper">
             <a href="/proteins" class="brand-logo" style="margin-left:20px">Protein Analysis</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                 <li><a href="/home">Home</a></li>
                 <li><a href="/proteins">Clustering</a></li>
                 <li><a href="/som">Self Organising Maps</a></li>
-                <!--<li><a href="/publications">Publications</a></li>-->
-                <!--<li><a href="/resume">Resume</a></li>-->
+                <li><a href="/rsa"> RSA Average Trajectories</a></li>
             </ul>
         </div>
     </nav>
@@ -39,8 +37,9 @@
                         <div class="input-group">
                             <span class="input-group-addon">Choose protein</span>
                             <select name="protein_select" class="selectpicker form-control">
-                                {% for o in proteins %}
-                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% for option in proteins %}
+                                <option {% if option.Selected %}selected="selected" {% endif %}>{{ option.name }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -49,8 +48,9 @@
                         <div class="input-group">
                             <span class="input-group-addon">Choose algorithm</span>
                             <select name="alg_select" class="selectpicker form-control">
-                                {% for o in method %}
-                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% for option in method %}
+                                <option {% if option.Selected %}selected="selected" {% endif %}>{{ option.name }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -59,9 +59,11 @@
                         <div class="input-group">
                             <span class="input-group-addon">Choose step</span>
                             <select name="comp_select" class="selectpicker form-control">
-                                {% for o in data %}
-                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% for option in data %}
+                                <option {% if option.Selected %}selected="selected" {% endif %}>{{ option.name }}
+                                </option>
                                 {% endfor %}
+
                             </select>
                         </div>
                     </div>
@@ -103,6 +105,11 @@
                     $('select').formSelect();
                     $('.materialboxed').materialbox();
               });
+
+
+
+
+
         </script>
 
         <div class="row">

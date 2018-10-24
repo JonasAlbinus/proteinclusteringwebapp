@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}"
+          media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"
+          media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/materialize.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Clustering</title>
+</head>
+<body>
+<header>
+    <nav class="teal darken-2">
+        <!--<nav class="red lighten-2">-->
+        <div class="nav-wrapper">
+            <a href="/proteins" class="brand-logo" style="margin-left:20px">Protein Analysis</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <!--<li><a href="/home">Home</a></li>-->
+                <li><a href="/proteins">Clustering</a></li>
+                <li><a href="/som">Self Organising Maps</a></li>
+                <li><a href="/rsa"> RSA Average Trajectories</a></li>
+                <!--<li><a href="/resume">Resume</a></li>-->
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row" style="margin-top:20px">
+            <form class="form-inline" method="POST" action="{{ url_for('testrsa') }}">
+                <div class="form-group">
+                    <div class="col s3">
+                        <div class="input-group">
+                            <span class="input-group-addon">Choose protein</span>
+                            <select name="protein_select" class="selectpicker form-control">
+                                {% for o in proteins %}
+                                <option value="{{ o.name }}">{{ o.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col s3">
+                        <button type="submit" class="btn btn-default" style="margin-top:20px"><i
+                                class="material-icons right">check</i>Submit Analysis
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row" style="margin-top:20px">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <img class="materialboxed center" width="650" src="{{ user_image }}"
+                     alt="You need to click view analysis first">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+                $(document).ready(function(){
+                    $('select').formSelect();
+                    $('.materialboxed').materialbox();
+              });
+
+
+
+        </script>
+
+        <div class="row">
+            <h5><i style="display:inline;vertical-align: bottom;"
+                   class="small material-icons">help</i>Parameters explained</h5>
+        </div>
+        <div class="row">
+            <div class="col s4">
+                <span style="font-weight:bold"> Relative accessible surface area:</span>
+                <p> - also known as relative solvent accessibility (RSA)</p>
+                <p> - is a measure of residue solvent exposure.</p>
+            </div>
+            <div class="col s4">
+
+                <span style="font-weight:bold">  Cutinase:</span>
+
+                <p>- is an enzyme that catalyzes the chemical reaction</p>
+
+                <p> cutin + H2O with product cutin monomers</p>
+            </div>
+            <div class="col s4">
+                <span style="font-weight:bold"> <p>PETase</p></span>
+                <p>- class of enzymes that catalyze the hydrolysis of PET plastic to monomeric
+                    mono-2-hydroxyethyl terephthalate (MHET)
+                </p>13 known three-dimensional crystal structures of PETases: 6EQD, 6EQE, 6EQF, 6EQG, 6EQH, 6ANE, 5XJH,
+                5YNS, 5XFY, 5XFZ, 5XG0, 5XH2 and 5XH3
+                <p>
+            </div>
+
+        </div>
+    </div>
+</main>
+<footer class="page-footer teal">
+    <div class="row">
+        <div class="col s4">
+            <i style="display:inline;vertical-align: bottom;" class="small material-icons">call</i>
+            <p style="display:inline">+040743693658</p>
+        </div>
+        <div class="col s4"><i style="display:inline;vertical-align: bottom;" class="small material-icons">mail</i>
+            <p style="display:inline" href="albert.silvana@cs.ubbcluj.ro">albert.silvana@cs.ubbcluj.ro</p>
+        </div>
+        <div class="col s4"><p>© 2018 by Silvana Albert</p></div>
+    </div>
+</footer>
+</body>
+</html>
