@@ -1,10 +1,14 @@
 import os
 import threading
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from flask import Flask, flash, redirect, render_template, request, url_for, send_from_directory
 from clustering import cluster
 from compute_analysis import compute_analysis
 from pathlib import Path
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -55,15 +59,15 @@ def testproteins():
     algName = ""
     k = ""
 
-    if step == 2500:
+    if int(step) == 2500:
         k = "4"
-    elif step == 1000:
+    elif int(step) == 1000:
         k = "10"
-    elif step == 500:
+    elif int(step) == 500:
         k = "20"
-    elif step == 100:
+    elif int(step) == 100:
         k = "100"
-    else:
+    elif int(step) == 50:
         k = "200"
 
     if alg == "K-Means Clustering":
@@ -83,7 +87,7 @@ def testproteins():
         file = protein + "_" + k + "_mb-k-means_pca" + ".png"
         algName = "mb-k-means"
 
-    print(filename)
+    print("Searching for: " + filename)
     my_file = Path(filename)
 
 
@@ -134,23 +138,23 @@ def testsom():
                            )
 
 
-@app.route('/rsa', methods=['GET', 'POST'])
-def rsa():
-    return render_template('rsa.html',
-                           proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}])
-
-
-@app.route('/testrsa', methods=['GET', 'POST'])
-def testrsa():
-    alg = request.form.get('protein_select')
-    if alg == "Cutinase":
-        filename = "static/data/CUT_RSA.png"
-    else:
-        filename = "static/data/PET_RSA.png"
-    return render_template('rsa.html',
-                           proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}],
-                           user_image=filename,
-                           )
+# @app.route('/rsa', methods=['GET', 'POST'])
+# def rsa():
+#     return render_template('rsa.html',
+#                            proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}])
+#
+#
+# @app.route('/testrsa', methods=['GET', 'POST'])
+# def testrsa():
+#     alg = request.form.get('protein_select')
+#     if alg == "Cutinase":
+#         filename = "static/data/CUT_RSA.png"
+#     else:
+#         filename = "static/data/PET_RSA.png"
+#     return render_template('rsa.html',
+#                            proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}],
+#                            user_image=filename,
+#                            )
 
 
 @app.route('/files', methods=['POST'])
@@ -193,6 +197,16 @@ def get_proteins_array(protein):
         proteinsArray.append({'name': '1L3P', "Selected": True})
     else:
         proteinsArray.append({'name': '1L3P', "Selected": False})
+
+    if protein == '4CG1':
+        proteinsArray.append({'name': '4CG1', "Selected": True})
+    else:
+        proteinsArray.append({'name': '4CG1', "Selected": False})
+
+    if protein == '6EQE':
+        proteinsArray.append({'name': '6EQE', "Selected": True})
+    else:
+        proteinsArray.append({'name': '6EQE', "Selected": False})
 
     return proteinsArray
 
@@ -251,4 +265,4 @@ def get_data_array(data):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0')

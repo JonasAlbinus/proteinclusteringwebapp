@@ -1,0 +1,4 @@
+scikit-learn
+seaborn
+matplotlib.pyplot
+Flask==1.0.2
