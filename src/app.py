@@ -2,8 +2,6 @@ import os
 import threading
 
 import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from flask import Flask, flash, redirect, render_template, request, url_for, send_from_directory
 from clustering import cluster
 from compute_analysis import compute_analysis
@@ -65,31 +63,34 @@ def testproteins():
         k = "10"
     elif int(step) == 500:
         k = "20"
+    elif int(step) == 400:
+        k = "25"
+    elif int(step) == 150:
+        k = "40"
     elif int(step) == 100:
         k = "100"
     elif int(step) == 50:
         k = "200"
 
     if alg == "K-Means Clustering":
-        filename = ("static/data/" + protein + "_" + k + "_k-means_pca" + ".png")
-        file = protein + "_" + k + "_k-means_pca" + ".png"
+        filename = ("static/data/" + protein + "_" + k + "_k-means" + ".png")
+        file = protein + "_" + k + "_k-means" + ".png"
         algName = "k-means"
     elif alg == "Agglomerative Clustering":
-        filename = ("static/data/" + protein + "_" + k + "_agg_pca" + ".png")
-        file = protein + "_" + k + "_agg_pca" + ".png"
+        filename = ("static/data/" + protein + "_" + k + "_agg" + ".png")
+        file = protein + "_" + k + "_agg" + ".png"
         algName = "agg"
-    elif alg == "birch":
-        filename = ("static/data/" + protein + "_" + k + "_birch_pca" + ".png")
-        file = protein + "_" + k + "_birch_pca" + ".png"
+    elif alg == "Birch Clustering":
+        filename = ("static/data/" + protein + "_" + k + "_birch" + ".png")
+        file = protein + "_" + k + "_birch" + ".png"
         algName = "birch"
     else:
-        filename = ("static/data/" + protein + "_" + k + "_mb-k-means_pca" + ".png")
-        file = protein + "_" + k + "_mb-k-means_pca" + ".png"
-        algName = "mb-k-means"
+        filename = ("static/data/" + protein + "_" + k + "_skfuzzy" + ".png")
+        file = protein + "_" + k + "_skfuzzy" + ".png"
+        algName = "skfuzzy"
 
     print("Searching for: " + filename)
     my_file = Path(filename)
-
 
     if my_file.is_file():
         return render_template('proteins.html', alg=alg, protein=protein, cluster_no=step,
@@ -138,25 +139,6 @@ def testsom():
                            )
 
 
-# @app.route('/rsa', methods=['GET', 'POST'])
-# def rsa():
-#     return render_template('rsa.html',
-#                            proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}])
-#
-#
-# @app.route('/testrsa', methods=['GET', 'POST'])
-# def testrsa():
-#     alg = request.form.get('protein_select')
-#     if alg == "Cutinase":
-#         filename = "static/data/CUT_RSA.png"
-#     else:
-#         filename = "static/data/PET_RSA.png"
-#     return render_template('rsa.html',
-#                            proteins=[{'name': 'Cutinase'}, {'name': 'PETase'}],
-#                            user_image=filename,
-#                            )
-
-
 @app.route('/files', methods=['POST'])
 def files():
     """Download a file."""
@@ -168,7 +150,6 @@ def files():
 # No caching at all for API endpoints.
 @app.after_request
 def add_header(response):
-    # response.cache_control.no_store = True
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
@@ -224,10 +205,10 @@ def get_alg_array(alg):
     else:
         alg_array.append({'name': 'Agglomerative Clustering', "Selected": False})
 
-    if alg == 'MiniBatchKMeans Clustering':
-        alg_array.append({'name': 'MiniBatchKMeans Clustering', "Selected": True})
+    if alg == 'Fuzzy C-means Clustering':
+        alg_array.append({'name': 'Fuzzy C-means Clustering', "Selected": True})
     else:
-        alg_array.append({'name': 'MiniBatchKMeans Clustering', "Selected": False})
+        alg_array.append({'name': 'Fuzzy C-means Clustering', "Selected": False})
 
     if alg == 'Birch Clustering':
         alg_array.append({'name': 'Birch Clustering', "Selected": True})
@@ -251,6 +232,16 @@ def get_data_array(data):
     else:
         data_array.append({'name': '100', "Selected": False})
 
+    if data == '250':
+        data_array.append({'name': '250', "Selected": True})
+    else:
+        data_array.append({'name': '250', "Selected": False})
+
+    if data == '400':
+        data_array.append({'name': '400', "Selected": True})
+    else:
+        data_array.append({'name': '400', "Selected": False})
+
     if data == '500':
         data_array.append({'name': '500', "Selected": True})
     else:
@@ -260,6 +251,11 @@ def get_data_array(data):
         data_array.append({'name': '1000', "Selected": True})
     else:
         data_array.append({'name': '1000', "Selected": False})
+
+    if data == '2500':
+        data_array.append({'name': '2500', "Selected": True})
+    else:
+        data_array.append({'name': '2500', "Selected": False})
 
     return data_array
 

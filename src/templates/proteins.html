@@ -19,7 +19,7 @@
     <nav class="teal darken-2">
         <!--<nav class="red lighten-2">-->
         <div class="nav-wrapper">
-            <a href="/proteins" class="brand-logo" style="margin-left:20px">Protein Analysis</a>
+            <a href="/proteins" class="brand-logo" style="margin-left:20px">ProteinA</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="/proteins">Clustering</a></li>
                 <li><a href="/som">Self Organising Maps</a></li>
@@ -109,9 +109,39 @@
 
 
 
-
         </script>
+        <div class="row">
+            <h5><i style="display:inline;vertical-align: bottom;"
+                   class="small material-icons">help</i>About</h5>
+            <p><span style="font-weight:bold">ProteinA </span> is a web application that allows users to start
+                customcluster analyses and download the results. A
+                clustering
+                analysis takes about 5 minutes, however the idea behind the software is to allow more complex processing
+                and
+                deliv-ering the results when ready. The clustering methods currently available inP
+                roteinAare:k-means,hierarchical agglomerative clustering(HAC), FCM and Birch
+            </p>
 
+        </div>
+        <div class="row">
+            <h5><i style="display:inline;vertical-align: bottom;"
+                   class="small material-icons">help</i>Results explained</h5>
+            <p><span style="font-weight:bold">How to read the image: </span>For each cluster, the conformations that
+                belong to it from the original data set are searched and
+                displayed sequentially. The image is built sequentially by layering all the points that match a cluster,
+                then moving to the next cluster, by using the corresponding color in the given gradient. The most
+                visible ones are the final clusters and some of the first ones might be underneath. The range of
+                conformations that belong to each color is available on the right hand side of each image. We would
+                expect that the colors which are visible on the plots (i.e. the colors for the proteins' configurations
+                which are closer to the last one - 10000) to be from the upper side of the gradient of colors, i.e.
+                shapes of yellow.</p>
+            <p><span style="font-weight:bold">V-measure</span> is an external evaluation measure used for assessing the
+                completeness and homogeneity of the resulting clusters, compared to the expected (ideal) partition</p>
+            <p><span style="font-weight:bold">Silhouette coefficient</span> is an internal evaluation measure which
+                expresses, for each instance, its similarity to the designated cluster by comparing it to the remaining
+                clusters</p>
+
+        </div>
         <div class="row">
             <h5><i style="display:inline;vertical-align: bottom;"
                    class="small material-icons">help</i>Parameters explained</h5>
@@ -120,9 +150,11 @@
             <div class="col s4">
                 <h5>The used proteins are:</h5>
                 <ul class="collection">
-                     <li class="collection-item"><span style="font-weight:bold">4CG1</span> -  Bacterial cutinases (classified as hydrolase)
+                    <li class="collection-item"><span style="font-weight:bold">4CG1</span> - Bacterial cutinases
+                        (classified as hydrolase)
                     </li>
-                     <li class="collection-item"><span style="font-weight:bold">6EQE</span> -  plastic-degrading aromatic polyesterase  (classified as hydrolase)
+                    <li class="collection-item"><span style="font-weight:bold">6EQE</span> - plastic-degrading aromatic
+                        polyesterase (classified as hydrolase)
                     </li>
                     <li class="collection-item"><span style="font-weight:bold">1GO1</span> - classified as a Ribosomal
                         Protein
@@ -150,9 +182,15 @@
                             style="font-weight:bold">Agglomerative hierarchical clustering</span> - builds clusters
                         incrementally; At each step, the two clusters that are the most similar are merged;
                     </li>
-                    <li class="collection-item"><span style="font-weight:bold">Mini Batch K-means</span> - reduces the
-                        computational cost by not
-                        using all the dataset; each iteration but a subsample of a fixed size
+                    <li class="collection-item"><span style="font-weight:bold">BIRCH (Balanced Iterative Reducing and Clustering using Hierarchies</span>
+                        -) is a clustering algorithm which does not require the entire data set to be initially
+                        available and
+                        is shown to be suitable for very large data sets. It is a hierarchical clustering method, known
+                        as one of the fastest clustering algorithms
+                    </li>
+                    <li class="collection-item"><span style="font-weight:bold">Fuzzy c-means (FCM)</span>
+                        is a partitional clustering technique which employs fuzzy partitioning such that a data instance
+                        can belong to all clusters with certain membership degrees between 0 and 1.
                     </li>
                 </ul>
             </div>
